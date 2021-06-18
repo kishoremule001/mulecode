@@ -1,0 +1,24 @@
+[
+{
+  "ID": 123112,
+  "code": "KKL44",
+  "FirstName": "EU1",
+  "price": 100,
+  "origin": "HYD",
+  "destination": "DLH",
+  "emptySeats": 75,
+   "flightType": "Airbus 23",
+    "totalSeats": 150
+    },
+	{
+  "ID": 123113,
+  "code": "AAL67",
+  "FirstName": "ANZ",
+  "price": 100,
+  "origin": "HYD",
+  "destination": "DLH",
+  "emptySeats": 75,
+   "flightType": "Airbus 11",
+    "totalSeats": 150
+    }
+	]

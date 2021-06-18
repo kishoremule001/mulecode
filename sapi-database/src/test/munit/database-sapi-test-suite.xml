@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="database-sapi-test-suite.xml" />
+	<munit:test name="database-sapi-test-suite-get:\dbOperations:database-sapi-PostiveTestCase" doc:id="b65de46a-3cf6-4299-a0b9-d704dbf6d333" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="9c6e2bbc-594b-4c78-9e87-c396dee6c99f" processor="db:select">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="7aa48587-9eb6-4790-843b-b26c95d95cb7" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#['[
+  {
+    &quot;EMPTYSEATS&quot;: 16,
+    &quot;FIRSTNAME&quot;: &quot;K&quot;,
+    &quot;CODE&quot;: &quot;KLR501&quot;,
+    &quot;PRICE&quot;: &quot;503&quot;,
+    &quot;ORIGIN&quot;: &quot;HYD&quot;,
+    &quot;DESTINATION&quot;: &quot;DLH&quot;,
+    &quot;FLIGHTTYPE&quot;: &quot;Airbus 750&quot;,
+    &quot;ID&quot;: 222,
+    &quot;TOTALSEATS&quot;: 150,
+    &quot;STATUS&quot;: &quot;P&quot;
+  }
+]']" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="cb31dd06-3b46-44c6-8464-30462919440a" >
+				<munit:attributes value="#[{uriParams:{'ID':'222'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to get:\dbOperations:database-sapi-config" doc:id="a7a12cec-2d02-4c72-9647-fb1dfcf9db47" name="get:\dbOperations:database-sapi-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="a16b9d48-f12a-49e4-8cbb-2c8621e0824d" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+			<munit-tools:assert-that doc:name="Assert that" doc:id="1ad5fb9d-6619-4b36-8a0f-b2daffb49e17" expression="#[payload]" is="#[MunitTools::equalTo(readUrl('classpath://getDb.json','application/json'))]"/>
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="48858d5b-7c40-4562-8099-5bf0cc3eac49" actual="#[payload.DESTINATION[0]]" expected="DLH"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="database-sapi-test-suite-get:\dbOperations:database-sapi-NegativeTestCase" doc:id="a36eed04-8de0-4728-b249-620dc34f3754" description="Test" expectedErrorType="DB:BAD_SQL_SYNTAX">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="ef411a5d-843d-4035-a508-e8859e7e3669" processor="db:select" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="7aa48587-9eb6-4790-843b-b26c95d95cb7" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#['[
+  {
+    &quot;EMPTYSEATS&quot;: 16,
+    &quot;FIRSTNAME&quot;: &quot;K&quot;,
+    &quot;CODE&quot;: &quot;KLR501&quot;,
+    &quot;PRICE&quot;: &quot;503&quot;,
+    &quot;ORIGIN&quot;: &quot;HYD&quot;,
+    &quot;DESTINATION&quot;: &quot;DLH&quot;,
+    &quot;FLIGHTTYPE&quot;: &quot;Airbus 750&quot;,
+    &quot;ID&quot;: 222,
+    &quot;TOTALSEATS&quot;: 150,
+    &quot;STATUS&quot;: &quot;P&quot;
+  }
+]']" mediaType="application/json" />
+					<munit-tools:error typeId="DB:BAD_SQL_SYNTAX" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="8767a625-c8d3-407f-9edd-a7c6b8c2c15f">
+				<munit:attributes value="#[{uriParams:{'ID':'222'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to get:\dbOperations:database-sapi-config" doc:id="d5404f8d-2128-4eda-9844-1ccaccd38a64" name="get:\dbOperations:database-sapi-config"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="database-sapi-test-suite-get:\dbOperations:database-sapi-configTest" doc:id="1507a5d3-48cd-4a4f-ae40-fc9d97b4f6bd" description="Test" expectedErrorType="DB:CONNECTIVITY">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="e5f047bf-5178-4415-983e-dfda76b485ee" processor="db:select" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="7aa48587-9eb6-4790-843b-b26c95d95cb7" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#['[
+  {
+    &quot;EMPTYSEATS&quot;: 16,
+    &quot;FIRSTNAME&quot;: &quot;K&quot;,
+    &quot;CODE&quot;: &quot;KLR501&quot;,
+    &quot;PRICE&quot;: &quot;503&quot;,
+    &quot;ORIGIN&quot;: &quot;HYD&quot;,
+    &quot;DESTINATION&quot;: &quot;DLH&quot;,
+    &quot;FLIGHTTYPE&quot;: &quot;Airbus 750&quot;,
+    &quot;ID&quot;: 222,
+    &quot;TOTALSEATS&quot;: 150,
+    &quot;STATUS&quot;: &quot;P&quot;
+  }
+]']" mediaType="application/json" />
+					<munit-tools:error typeId="DB:CONNECTIVITY" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="d7f4d0bd-9958-4a27-a31b-159a101e3868">
+				<munit:attributes value="#[{uriParams:{'ID':'222'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to get:\dbOperations:database-sapi-config" doc:id="b8d0663b-e7e2-4015-9b60-847e6f1d1475" name="get:\dbOperations:database-sapi-config"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="database-sapi-test-suite-put:\dbOperations\(id):application\json:database-sapi-PositiveTestCase" doc:id="da35ad0d-7647-4ea0-b612-247295f59869" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="3409abfd-16ef-467a-bf5d-1dec4864524f" processor="db:update">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="32b6d32e-d218-4e82-be0a-3cf8b99647c0" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#['{
+  &quot;generatedKeys&quot;: {
+    
+  },
+  &quot;affectedRows&quot;: 1
+}']" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="104d3962-e563-47ce-b757-8b3fe78648ef" >
+				<munit:payload value="#['{
+	&quot;ID&quot;: &quot;222&quot;,
+	&quot;status&quot;: &quot;S&quot;
+}']" mediaType="application/json" />
+				<munit:attributes value="#[{uriParams:{'id':'222'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to put:\dbOperations\(id):application\json:database-sapi-config" doc:id="73deb72c-8f2a-4c86-aecb-941a98357bcd" name="put:\dbOperations\(id):application\json:database-sapi-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert expression" doc:id="6ca1f3d9-5cb9-47d1-8f53-01933dc04e52" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="database-sapi-test-suite-put:\dbOperations\(id):application\json:database-sapi-NegativeTestCase" doc:id="081cf6e8-81fc-4e63-93f7-dbb283d345f5" description="Test" expectedErrorType="ANY">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="30366396-f3ae-4623-872b-125552d2475c" processor="db:update" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="32b6d32e-d218-4e82-be0a-3cf8b99647c0" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#['{
+  &quot;generatedKeys&quot;: {
+    
+  },
+  &quot;affectedRows&quot;: 1
+}']" mediaType="application/json" />
+					<munit-tools:error typeId="ANY" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="257b221c-63c4-4634-acf1-4ae5fbbf126a">
+				<munit:payload value="#['{
+	&quot;ID&quot;: &quot;222&quot;,
+	&quot;status&quot;: &quot;S&quot;
+}']" mediaType="application/json" />
+				<munit:attributes value="#[{uriParams:{'id':'222'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to put:\dbOperations\(id):application\json:database-sapi-config" doc:id="0d1ede97-13ae-4648-8728-b777a848451a" name="put:\dbOperations\(id):application\json:database-sapi-config"/>
+		</munit:execution>
+	</munit:test>
+
+
+</mule>

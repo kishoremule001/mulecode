@@ -1,0 +1,9 @@
+database:
+      host: "sql6.freesqldatabase.com"
+      port: "3306"
+      username: "sql6415132"
+      password: "![wwomk/7STPzL8oV1bqOVjg==]"
+      databaseName: "sql6415132"
+      
+http:
+  port: "2222"      

@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="postDB" format="json">
+      <types:shape format="weave" example="examples/postDB-2.json"><![CDATA[%dw 2.0
+
+type postDB = Array<{|  ID: Number {"typeId": "int"},   code: String,   FirstName: String,   price: Number {"typeId": "int"},   origin: String,   destination: String,   emptySeats: Number {"typeId": "int"},   flightType: String,   totalSeats: Number {"typeId": "int"}|}> {"example": "[{\\\"ID\\\":123,\\\"code\\\":\\\"ER38sd\\\",\\\"FirstName\\\":\\\"AZ\\\",\\\"price\\\":400,\\\"origin\\\":\\\"HYD\\\",\\\"destination\\\":\\\"DLH\\\",\\\"emptySeats\\\":75,\\\"flightType\\\":\\\"Boeing 558\\\",\\\"totalSeats\\\":150},{\\\"ID\\\":123,\\\"code\\\":\\\"ER38sd\\\",\\\"FirstName\\\":\\\"AZ\\\",\\\"price\\\":400,\\\"origin\\\":\\\"HYD\\\",\\\"destination\\\":\\\"DLH\\\",\\\"emptySeats\\\":75,\\\"flightType\\\":\\\"Boeing 558\\\",\\\"totalSeats\\\":150}]"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="postDB-NonReapting" format="json">
+      <types:shape format="weave" example="examples/postDB-3.json"><![CDATA[%dw 2.0
+
+type postDB_NonReapting = Array<{|  ID: Number {"typeId": "int"},   code: String,   FirstName: String,   price: Number {"typeId": "int"},   origin: String,   destination: String,   emptySeats: Number {"typeId": "int"},   flightType: String,   totalSeats: Number {"typeId": "int"}|}> {"example": "[{\\\"ID\\\":123,\\\"code\\\":\\\"ER38sd\\\",\\\"FirstName\\\":\\\"AZ\\\",\\\"price\\\":400,\\\"origin\\\":\\\"HYD\\\",\\\"destination\\\":\\\"DLH\\\",\\\"emptySeats\\\":75,\\\"flightType\\\":\\\"Boeing 558\\\",\\\"totalSeats\\\":150},{\\\"ID\\\":123,\\\"code\\\":\\\"ER38sd\\\",\\\"FirstName\\\":\\\"AZ\\\",\\\"price\\\":400,\\\"origin\\\":\\\"HYD\\\",\\\"destination\\\":\\\"DLH\\\",\\\"emptySeats\\\":75,\\\"flightType\\\":\\\"Boeing 558\\\",\\\"totalSeats\\\":150}]"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#11ddbd28-1e94-4c1b-9e17-54f4b3c41e40">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="postDB"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="postDB-NonReapting"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#b869743c-3c48-4af3-a8ac-9ec72db69d19">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="postDB"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="postDB"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>
