@@ -41,6 +41,20 @@
                             <artifactId>snowflake-jdbc</artifactId>
                         </sharedLibrary>
                     </sharedLibraries>
+				<cloudHubDeployment>
+						<uri>https://anypoint.mulesoft.com</uri>
+						<muleVersion>${mule.version}</muleVersion>
+						<username>${anypoint.username}</username>
+						<password>${anypoint.password}</password>
+						<applicationName>${appname}</applicationName>
+						<environment>${env}</environment>
+						<objectStoreV2>true</objectStoreV2>
+						<workers>${workers}</workers>
+						<workerType>${vCore}</workerType>
+						<businessGroup>${business}</businessGroup>
+						
+						
+					</cloudHubDeployment>	
                 </configuration>
 			</plugin>
 		<plugin>
